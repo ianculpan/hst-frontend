@@ -1,0 +1,344 @@
+@import 'tailwindcss';
+
+@theme {
+    /* Typography */
+    --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    --font-display: Inter, var(--font-sans);
+
+    /* Brand palette (default) */
+    --color-brand: #7c3aed;
+    --color-brand-50:  #f5f3ff;
+    --color-brand-100: #ede9fe;
+    --color-brand-200: #ddd6fe;
+    --color-brand-300: #c4b5fd;
+    --color-brand-400: #a78bfa;
+    --color-brand-500: #8b5cf6;
+    --color-brand-600: #7c3aed;
+    --color-brand-700: #6d28d9;
+    --color-brand-800: #5b21b6;
+    --color-brand-900: #4c1d95;
+
+
+    --color-theme-50:  #f5f3ff;
+    --color-theme-100: #ede9fe;
+    --color-theme-200: #ddd6fe;
+    --color-theme-300: #c4b5fd;
+    --color-theme-400: #a78bfa;
+    --color-theme-500: #8b5cf6;
+    --color-theme-600: #7c3aed;
+    --color-theme-700: #6d28d9;
+    --color-theme-800: #5b21b6;
+    --color-theme-900: #4c1d95;
+
+
+    --color-brand-foreground: #ffffff;
+    --color-accent: #6db6d4;
+    --color-accent-foreground: #062025;
+    --color-highlight: #8b5cf6;
+    --color-highlight-hover: #7c3aed;
+
+    /* Semantic surface colors */
+    --color-bg: var(--color-brand-100);              /* page background */
+    --color-fg: var(--color-stone-500);              /* default foreground */
+    --color-card: #111827;            /* panel/card background */
+    --color-muted: var(--color-brand-300);           /* muted foreground */
+    --color-border: #1f2937;          /* subtle borders */
+
+    /* Text colors */
+    --color-normal-text: var(--color-stone-500);
+    --color-highlight-text: var(--color-brand-500);
+    --color-reversed-text: var(--color-brand-100);
+
+    /* Background colors */
+    --color-normal-background: var(--color-brand-100);
+    --color-highlight-background: var(--color-brand-500);
+    --color-reversed-background: var(--color-brand-900);
+
+
+    /* Status colors */
+    --color-success: #22c55e;
+    --color-warning: #f59e0b;
+    --color-danger:  #ef4444;
+    --color-info:    #3b82f6;
+
+    /* Radius */
+    --radius-sm: 0.125rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+
+    /* Shadows */
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-xl: none;
+
+    /* Section spacing defaults */
+    --section-pad-y: 2.5rem;   /* 40px */
+    --section-pad-x: 1rem;     /* 16px */
+    --section-radius: var(--radius-lg);
+
+    /* Legacy text size variables (for backwards compatibility) */
+    --text-h1: 1.5rem;        /* 24px - text-2xl */
+    --text-h2: 1.25rem;        /* 20px - text-xl */
+    --text-h3: 1.125rem;       /* 18px - text-lg */
+    --text-h4: 1rem;           /* 16px - text-base */
+    --text-p: 1rem;            /* 16px - base text */
+    --text-small: 0.875rem;    /* 14px - text-sm */
+    --text-sup: 0.875rem;      /* 14px - superscript */
+    --text-sub: 0.875rem;      /* 14px - subscript */
+    
+    /* Font size variables for Tailwind utility classes */
+    --font-size-h1: var(--text-h1);
+    --font-size-h2: var(--text-h2);
+    --font-size-h3: var(--text-h3);
+    --font-size-h4: var(--text-h4);
+    --font-size-p: var(--text-p);
+    --font-size-small: var(--text-small);
+    --font-size-sup: var(--text-sup);
+    --font-size-sub: var(--text-sub);
+    
+    /* Font weight variables */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* Image size variables */
+    --image-max-width: 100%;
+    --image-width: 100%;
+    --image-height: auto;
+}
+
+
+/* @import './theme-minty.css'; */
+/* @import './theme-ocean.css'; */
+/* @import './theme-sunset.css'; */
+/* @import './theme-vintage.css'; */
+@import './theme-barnyard.css';
+/* @import './theme-twinstack.css'; */
+
+
+
+body {
+    font-family: var(--font-sans);
+}
+
+#root {
+    width: 100%;
+    margin: auto;
+}
+
+
+@layer components {
+    section {
+        padding-block: var(--section-pad-y);
+        padding-inline: var(--section-pad-x);
+        border-radius: var(--section-radius);
+        margin-block: var(--section-margin-y);
+        margin-inline: var(--section-margin-x);
+    }
+}
+
+@layer utilities {
+    /* Theme-aware text color utilities */
+    .text-brand {
+        color: var(--color-normal-text);
+    }
+
+    .text-highlight {
+        color: var(--color-highlight-text);
+    }
+    .text-muted {
+        color: var(--color-muted);
+    }
+
+    .site-background {
+        background-color: var(--color-bg);
+    }
+    .site-foreground {
+        color: var(--color-fg);
+    }
+
+    /* Panel colors */
+    .panel {
+        background-color: var(--color-panel);
+        color: var(--color-fg);
+    }
+
+    .panel-title {
+        color: var(--color-panel-foreground);
+    }
+
+    .panel-highlight {
+        background-color: var(--color-panel-highlight);
+        color: var(--color-panel-highlight-foreground);
+    }
+
+    /* Card colors */
+    .card {
+        background-color: var(--color-card);
+        color: var(--color-fg);
+    }
+    .card-title {
+        color: var(--color-dark);
+        background-color: var(--color-light);
+    }
+
+    .card-text {
+        color: var(--color-dark);
+        background-color: var(--color-light);
+    }
+
+    .card-text-highlight {
+        color: var(--color-dark);
+        background-color: var(--color-muted);
+    }
+
+    .button {
+        background-color: var(--color-button);
+        color: var(--color-button-foreground);
+    }
+    .button-hover {
+        background-color: var(--color-button-hover);
+        color: var(--color-light);
+    }
+
+    /* .text-accent {
+        color: var(--color-highlight-text);
+    } */
+    
+    /* .text-accent-foreground {
+        color: var(--color-accent-foreground);
+    } */
+    
+    .text-light {
+        color: var(--color-light);
+    }
+    .text-dark {
+        color: var(--color-dark);
+    }
+    .text-muted {
+        color: var(--color-muted);
+    }
+
+
+    .text-highlight {
+        color: var(--color-highlight-text);
+    }
+    
+    .text-highlight-foreground {
+        color: var(--color-highlight-foreground);
+    }
+    
+    .text-success {
+        color: var(--color-success);
+    }
+    
+    .text-warning {
+        color: var(--color-warning);
+    }
+    
+    .text-danger {
+        color: var(--color-danger);
+    }
+    
+    .text-info {
+        color: var(--color-info);
+    }
+    
+    .text-fg {
+        color: var(--color-fg);
+    }
+    .text-fg-reversed {
+        color: var(--color-reversed);
+    }
+    
+    .text-muted {
+        color: var(--color-muted);
+    }
+
+    .text-plain-text {
+        color: var(--color-plain-text);
+    }
+    
+    .text-plain-text-highlight {
+        color: var(--color-plain-text-highlight);
+    }
+    
+    /* Theme-aware background color utilities */
+    .bg-brand {
+        background-color: var(--color-normal-background);
+    }
+    .bg-accent {
+        background-color: var(--color-highlight-backgroundt);
+    }
+    .bg-muted {
+        background-color: var(--color-muted);
+    }
+    .bg-light {
+        background-color: var(--color-light);
+    }
+    .bg-dark {
+        background-color: var(--color-dark);
+    }
+    .bg-accent-foreground {
+        background-color: var(--color-accent-foreground);
+    }
+    
+    .bg-highlight {
+        background-color: var(--color-highlight);
+    }
+    
+    .bg-highlight-hover {
+        background-color: var(--color-highlight-hover);
+    }
+    
+    .bg-highlight-background {
+        background-color: var(--color-highlight-background);
+    }
+    
+    .bg-plain-text {
+        background-color: var(--color-plain-text);
+    }
+    
+    .bg-plain-text-highlight {
+        background-color: var(--color-plain-text-highlight);
+    }
+    
+    /* Theme-aware border color utilities */
+    .border-accent {
+        border-color: var(--color-highlight-background);
+    }
+    
+    .border-highlight {
+        border-color: var(--color-highlight);
+    }
+    
+    .border-plain-text {
+        border-color: var(--color-plain-text);
+    }
+    
+    .border-plain-text-highlight {
+        border-color: var(--color-plain-text-highlight);
+    }
+    
+    /* Theme-aware font weight utilities */
+    .font-weight-normal {
+        font-weight: var(--font-weight-normal);
+    }
+    
+    .font-weight-medium {
+        font-weight: var(--font-weight-medium);
+    }
+    
+    .font-weight-semibold {
+        font-weight: var(--font-weight-semibold);
+    }
+    
+    .font-weight-bold {
+        font-weight: var(--font-weight-bold);
+    }
+}
+
+

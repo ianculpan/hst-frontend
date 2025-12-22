@@ -1,0 +1,76 @@
+/* Heartwood theme (greens/teals) */
+:root {
+    /* Typography overrides */
+    --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    --font-display: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+    /* base anchors from your list */
+    --color-brand-50:  var(--color-stone-50);
+    --color-brand-100: var(--color-stone-100);
+    --color-brand-200: var(--color-stone-200);
+    --color-brand-300: var(--color-stone-300);
+    --color-brand-400: var(--color-stone-400);
+    --color-brand-500: var(--color-stone-500);
+    --color-brand-600: var(--color-stone-600);
+    --color-brand-700: var(--color-stone-700);
+    --color-brand-800: var(--color-stone-800);
+    --color-brand-900: var(--color-stone-900);
+    /* --color-brand: var(--color-brand-600);
+    --color-brand-foreground: #e8fbf5; */
+
+    --color-theme-50:  var(--color-blue-50);
+    --color-theme-100: var(--color-blue-100);
+    --color-theme-200: var(--color-blue-200);
+    --color-theme-300: var(--color-blue-300);
+    --color-theme-400: var(--color-blue-400);
+    --color-theme-500: var(--color-blue-500);
+    --color-theme-600: var(--color-blue-600);
+    --color-theme-700: var(--color-blue-700);
+    --color-theme-800: var(--color-blue-800);
+    --color-theme-900: var(--color-blue-900);
+
+
+    --color-accent: var(--color-blue-100);
+    --color-accent-foreground: var(--color-blue-200);
+    --color-highlight: var(--color-blue-300);
+    --color-highlight-hover: var(--color-blue-500);
+    --color-highlight-background: var(--color-blue-700);
+
+
+    --color-panel: var(--color-blue-600);
+    --color-panel-foreground: var(--color-cyan-100);
+    --color-panel-highlight: var(--color-blue-600);
+    --color-dark: var(--color-stone-900);
+    --color-light: var(--color-stone-50);
+    --color-muted: var(--color-stone-300);
+
+   
+
+    
+    --color-bg: var(--color-brand-900); 
+    --color-fg: var(--color-brand-50);
+    --color-card:var(--color-brand-400);
+    --color-muted: var(--color-brand-300);
+    --color-border: var(--color-brand-800);
+
+    /* Radius overrides (minty: medium roundness) */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.3rem;
+    --radius-lg: 0.4rem;
+    --radius-xl: 0.5rem;
+    --radius-card: var(--radius-lg);
+    --radius-button: var(--radius-md);
+
+    /* Shadow overrides */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.06);
+    --shadow-md: 0 6px 10px -2px rgb(9 188 138 / 0.18), 0 2px 6px -2px rgb(0 0 0 / 0.08);
+    --shadow-lg: 0 12px 22px -5px rgba(3, 71, 49, 0.593), 0 6px 12px -6px rgba(0, 0, 0, 0.209);
+
+    --section-pad-y: 0rem;   
+    --section-pad-x: 0rem;
+    --section-margin-y: 0rem;   
+    --section-margin-x: 0rem;
+    --section-radius:var(--radius-card);
+
+}
