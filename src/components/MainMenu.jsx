@@ -159,10 +159,10 @@ export default function MainMenu() {
                 color: 'var(--color-accent-foreground)',
               },
             }}
-            key="invoice"
-            onClick={() => handleNavigation('/invoice')}
+            key="incidents"
+            onClick={() => handleNavigation('/incidents')}
           >
-            Invoice
+            Incidents
           </MenuItem>,
           <MenuItem
             sx={{

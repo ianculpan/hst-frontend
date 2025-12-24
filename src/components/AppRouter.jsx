@@ -10,7 +10,7 @@ const PrivatePage = lazy(() => import('../Pages/PrivatePage.jsx'));
 const TodoList = lazy(() => import('../Pages/TodoList.jsx'));
 const ContactList = lazy(() => import('../Pages/ContactList.jsx'));
 const ProductList = lazy(() => import('../Pages/ProductList.jsx'));
-const InvoiceList = lazy(() => import('../Pages/InvoiceList.jsx'));
+const IncidentList = lazy(() => import('../Pages/IncidentList.jsx'));
 const StockPage = lazy(() => import('../Pages/StockPage.jsx'));
 
 // Loading component
@@ -54,10 +54,10 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="/invoice"
+          path="/incidents"
           element={
             <PrivateRoute>
-              <InvoiceList />
+              <IncidentList />
             </PrivateRoute>
           }
         />

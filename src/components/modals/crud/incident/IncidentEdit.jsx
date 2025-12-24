@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apiClient } from '../../../../helpers/apiHelper.js';
 import MediumContact from '../../../MediumContact.jsx';
-import InvoiceLines from '../../../InvoiceLines.jsx';
+import InvoiceLines from '../../../IncidentLines.jsx';
 import ContactPicker from '../../../ContactPicker.jsx';
 import invoiceLinesSave from '../../../../helpers/data/invoiceLinesStore.jsx';
 import invoiceLineDelete from '../../../../helpers/data/invoiceLineDelete.jsx';

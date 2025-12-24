@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { getApiEndpoint, apiClient } from '../helpers/apiHelper.js';
-import InvoiceCard from '../components/InvoiceCard.jsx';
-import InvoiceFilters from '../components/InvoiceFilters.jsx';
+import IncidentCard from '../components/IncidentCard.jsx';
+import IncidentFilters from '../components/IncidentFilters.jsx';
 import { useModal } from '../components/modals/ModalContext.jsx';
-import InvoiceCreate from '../components/modals/crud/invoice/InvoiceCreate.jsx';
+import IncidentCreate from '../components/modals/crud/incident/IncidentCreate.jsx';
 
-const InvoiceList = () => {
+const incidentList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [responseData, setResponseData] = useState(null);
@@ -23,32 +23,32 @@ const InvoiceList = () => {
     (data) => {
       if (!data) return [];
       console.log(data);
-      return data?.filter((invoice) => {
+      return data?.filter((incident) => {
         if (!filters.search && !filters.status && !filters.dateFrom && !filters.dateTo) return true;
 
         const searchTerm = filters.search.toLowerCase();
-        const invoiceNumber = String(invoice.invoice_number);
-        const customerName = invoice.contact?.businessName?.toLowerCase() || '';
-        const customerRef = invoice.customer_reference?.toLowerCase() || '';
+        const incidentNumber = String(incident_number);
+        const customerName = incident.contact?.businessName?.toLowerCase() || '';
+        const customerRef = incident.customer_reference?.toLowerCase() || '';
 
         const searchMatch =
           !filters.search ||
-          invoiceNumber.includes(searchTerm) ||
+          incidentNumber.includes(searchTerm) ||
           customerName.includes(searchTerm) ||
           customerRef.includes(searchTerm);
 
-        const statusMatch = !filters.status || invoice.status === filters.status;
+        const statusMatch = !filters.status || incident.status === filters.status;
 
         let dateMatch = true;
         if (filters.dateFrom) {
-          const invoiceDate = new Date(invoice.invoice_date);
+          const incidentDate = new Date(incident.incident_date);
           const fromDate = new Date(filters.dateFrom);
-          dateMatch = dateMatch && invoiceDate >= fromDate;
+          dateMatch = dateMatch && incidentDate >= fromDate;
         }
         if (filters.dateTo) {
-          const invoiceDate = new Date(invoice.invoice_date);
+          const incidentDate = new Date(incident.incident_date);
           const toDate = new Date(filters.dateTo);
-          dateMatch = dateMatch && invoiceDate <= toDate;
+          dateMatch = dateMatch && incidentDate <= toDate;
         }
 
         return searchMatch && statusMatch && dateMatch;
@@ -70,14 +70,14 @@ const InvoiceList = () => {
     setIsLoading(true);
     setErrorMessage('');
     try {
-      // Fetch invoice headers
-      const headersUrl = getApiEndpoint('/invoice-headers');
+      // Fetch incident headers
+      const headersUrl = getApiEndpoint('/incident-headers');
       const headersResponse = await apiClient.get(headersUrl);
 
       // Use response.data.items for the data array
-      const invoiceHeaders = headersResponse.data?.items || headersResponse.data || [];
+      const incidentHeaders = headersResponse.data?.items || headersResponse.data || [];
 
-      setResponseData(Array.isArray(invoiceHeaders) ? invoiceHeaders : []);
+      setResponseData(Array.isArray(incidentHeaders) ? incidentHeaders : []);
     } catch (error) {
       if (axios.isCancel(error)) {
         return;
@@ -100,48 +100,48 @@ const InvoiceList = () => {
     setFilteredData(applyFilters(responseData));
   }, [responseData, applyFilters]);
 
-  const handleInvoiceUpdate = () => {
+  const handleincidentUpdate = () => {
     setResponseData(null);
     fetchIndexData();
   };
 
-  const handleInvoiceCreate = async (newItem) => {
-    // Re-fetch the complete invoice data to get all details including contact info
+  const handleincidentCreate = async (newItem) => {
+    // Re-fetch the complete incident data to get all details including contact info
     try {
-      const headersUrl = getApiEndpoint('/invoice-headers');
+      const headersUrl = getApiEndpoint('/incidents');
       const headersResponse = await apiClient.get(headersUrl);
-      const updatedInvoiceHeaders = headersResponse.data?.items || headersResponse.data || [];
+      const updatedincidentHeaders = headersResponse.data?.items || headersResponse.data || [];
 
-      // Find the newly created invoice in the updated data
-      const createdInvoice = Array.isArray(updatedInvoiceHeaders)
-        ? updatedInvoiceHeaders.find((invoice) => invoice.id === newItem.id)
+      // Find the newly created incident in the updated data
+      const createdincident = Array.isArray(updatedincidentHeaders)
+        ? updatedincidentHeaders.find((incident) => incident.id === newItem.id)
         : null;
 
-      if (createdInvoice) {
+      if (createdincident) {
         setResponseData((prevData) => {
-          // Remove any existing invoice with the same ID and add the complete one
+          // Remove any existing incident with the same ID and add the complete one
           const filteredData = prevData.filter((item) => item.id !== newItem.id);
-          return [...filteredData, createdInvoice];
+          return [...filteredData, createdincident];
         });
       }
     } catch (error) {
-      console.error('Error fetching updated invoice data:', error);
+      console.error('Error fetching updated incident data:', error);
       // Fallback to the original behavior if re-fetch fails
       setResponseData((prevData) => [...prevData, newItem]);
     }
   };
 
   const openCreateModal = () => {
-    openModal(<InvoiceCreate closeModal={closeModal} onUpdate={handleInvoiceCreate} />);
+    openModal(<incidentCreate closeModal={closeModal} onUpdate={handleincidentCreate} />);
   };
 
   return (
     <div className="">
       <section className="panel rounded-lg py-4 gap-4">
         <div className="flex items-center justify-between">
-          <h1 className="panel-title p-4 text-3xl text-center">Invoices</h1>
+          <h1 className="panel-title p-4 text-3xl text-center">incidents</h1>
           <div className="flex items-center gap-2 pr-2">
-            <InvoiceFilters
+            <incidentFilters
               filters={filters}
               onFilterChange={handleFilterChange}
               onClearFilters={clearFilters}
@@ -160,8 +160,8 @@ const InvoiceList = () => {
           {!isLoading && errorMessage && <div className="text-red-300">Error: {errorMessage}</div>}
           {!isLoading && !errorMessage && filteredData && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {filteredData?.map((invoice, index) => (
-                <InvoiceCard key={index} invoice={invoice} onUpdate={handleInvoiceUpdate} />
+              {filteredData?.map((incident, index) => (
+                <incidentCard key={index} incident={incident} onUpdate={handleincidentUpdate} />
               ))}
             </div>
           )}
@@ -171,4 +171,4 @@ const InvoiceList = () => {
   );
 };
 
-export default InvoiceList;
+export default incidentList;

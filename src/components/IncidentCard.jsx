@@ -1,43 +1,41 @@
 import { useState } from 'react';
-import CrudButtons from './CrudButtons';
+import CrudButtons from './CrudButtons.jsx';
 import { useModal } from './modals/ModalContext.jsx';
-import InvoiceView from './modals/crud/invoice/InvoiceView.jsx';
-import InvoiceEdit from './modals/crud/invoice/InvoiceEdit.jsx';
-import InvoiceDelete from './modals/crud/invoice/InvoiceDelete.jsx';
+import IncidentView from './modals/crud/incident/IncidentView.jsx';
+import IncidentEdit from './modals/crud/incident/IncidentEdit.jsx';
+import IncidentDelete from './modals/crud/incident/IncidentDelete.jsx';
 import ShortContact from './ShortContact.jsx';
 import { apiClient } from '../helpers/apiHelper.js';
 
-const InvoiceCard = ({ invoice, onUpdate }) => {
+const IncidentCard = ({ incident, onUpdate }) => {
   const {
     _id,
-    invoice_number,
-    invoice_date,
+    incident_number,
+    incident_date,
     due_date,
     contact,
     status,
+    description,
     details,
-    net_total,
-    tax_total,
-    gross_total,
     updated_at,
-  } = invoice;
+  } = incident;
 
   const { openModal } = useModal();
   const { closeModal } = useModal();
   const [isFinalising, setIsFinalising] = useState(false);
   const [finaliseError, setFinaliseError] = useState('');
 
-  const invoiceId = invoice.id || _id;
+  const incidentId = incident.id || _id;
   const hasLineItems = Array.isArray(details) && details.length > 0;
 
   const viewModal = () => {
-    openModal(<InvoiceView invoice={invoice} />);
+    openModal(<incidentView incident={incident} />);
   };
   const editModal = () => {
-    openModal(<InvoiceEdit invoice={invoice} closeModal={closeModal} onUpdate={onUpdate} />);
+    openModal(<incidentEdit incident={incident} closeModal={closeModal} onUpdate={onUpdate} />);
   };
   const deleteModal = () => {
-    openModal(<InvoiceDelete invoice={invoice} closeModal={closeModal} onUpdate={onUpdate} />);
+    openModal(<incidentDelete incident={incident} closeModal={closeModal} onUpdate={onUpdate} />);
   };
 
   const formatCurrency = (amount) => {
@@ -48,7 +46,7 @@ const InvoiceCard = ({ invoice, onUpdate }) => {
     return new Date(dateString).toLocaleDateString('en-GB');
   };
 
-  const getStatusColor = (invoiceStatus) => {
+  const getStatusColor = (incidentStatus) => {
     const colors = {
       draft: 'bg-gray-600',
       sent: 'bg-blue-600',
@@ -58,10 +56,10 @@ const InvoiceCard = ({ invoice, onUpdate }) => {
       partial: 'bg-yellow-600',
       finalised: 'bg-emerald-600',
     };
-    return colors[invoiceStatus] || 'bg-gray-600';
+    return colors[incidentStatus] || 'bg-gray-600';
   };
 
-  const getStatusLabel = (invoiceStatus) => {
+  const getStatusLabel = (incidentStatus) => {
     const labels = {
       draft: 'Draft',
       sent: 'Sent',
@@ -71,11 +69,11 @@ const InvoiceCard = ({ invoice, onUpdate }) => {
       partial: 'Partial',
       finalised: 'Finalised',
     };
-    return labels[invoiceStatus] || invoiceStatus;
+    return labels[incidentStatus] || incidentStatus;
   };
 
   const handleFinalise = async () => {
-    if (!invoiceId || !hasLineItems || isFinalising) {
+    if (!incidentId || !hasLineItems || isFinalising) {
       return;
     }
 
@@ -83,13 +81,13 @@ const InvoiceCard = ({ invoice, onUpdate }) => {
     setFinaliseError('');
 
     try {
-      await apiClient.post(`/invoice-headers/${invoiceId}/finalise`);
+      await apiClient.post(`/incident-headers/${incidentId}/finalise`);
       if (typeof onUpdate === 'function') {
         onUpdate();
       }
     } catch (error) {
       const message =
-        error?.response?.data?.message || error?.message || 'Failed to finalise invoice';
+        error?.response?.data?.message || error?.message || 'Failed to finalise incident';
       setFinaliseError(message);
     } finally {
       setIsFinalising(false);
@@ -100,7 +98,7 @@ const InvoiceCard = ({ invoice, onUpdate }) => {
     <div className="rounded-xl card p-4 space-y-3">
       {/* Header Section */}
       <div className="text-xl card-title rounded-lg px-4 flex items-center justify-between">
-        <div className="truncate">{invoice_number}</div>
+        <div className="truncate">{incident_number}</div>
         <div className="flex items-center gap-2">
           {hasLineItems && status !== 'sent' && (
             <button
@@ -130,7 +128,7 @@ const InvoiceCard = ({ invoice, onUpdate }) => {
       <div className="card-text rounded-lg px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div>
-            <span className="font-semibold">Invoice Date:</span> {formatDate(invoice_date)}
+            <span className="font-semibold">incident Date:</span> {formatDate(incident_date)}
           </div>
           <div>
             <span className="font-semibold">Due Date:</span> {formatDate(due_date)}
@@ -162,14 +160,6 @@ const InvoiceCard = ({ invoice, onUpdate }) => {
         )}
       </div>
 
-      {/* Total Amount */}
-      <div className="card-text rounded-lg px-4 text-center space-y-1">
-        <div className="text-sm">
-          Net: {formatCurrency(net_total)} | Tax: {formatCurrency(tax_total)}
-        </div>
-        <div className="font-semibold text-lg">Total: {formatCurrency(gross_total)}</div>
-      </div>
-
       {/* Footer */}
       <div className="card-text rounded-lg px-4 text-xs text-center">
         <span className="font-semibold">Updated:</span> {formatDate(updated_at)}
@@ -181,4 +171,4 @@ const InvoiceCard = ({ invoice, onUpdate }) => {
   );
 };
 
-export default InvoiceCard;
+export default IncidentCard;

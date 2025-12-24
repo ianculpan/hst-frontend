@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { apiClient } from '../../../../helpers/apiHelper.js';
-import InvoiceLines from '../../../InvoiceLines.jsx';
+import IncidentLines from '../../../IncidentLines.jsx';
 import ContactPicker from '../../../ContactPicker.jsx';
 
-const InvoiceCreate = ({ closeModal, onUpdate }) => {
+const IncidentCreate = ({ closeModal, onUpdate }) => {
   const [formData, setFormData] = useState({
-    invoice_number: '',
-    invoice_date: new Date().toISOString().split('T')[0],
+    incident_number: '',
+    incident_date: new Date().toISOString().split('T')[0],
     due_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     contact_id: '',
     contact_name: '',
@@ -14,13 +14,9 @@ const InvoiceCreate = ({ closeModal, onUpdate }) => {
     status: 'draft',
     notes: '',
     line_items: [],
-    net_total: 0,
-    tax_total: 0,
-    gross_total: 0,
   });
 
   const [contacts, setContacts] = useState([]);
-  const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [formStatus, setFormStatus] = useState('');
   const [selectedContact, setSelectedContact] = useState(null);
@@ -34,7 +30,6 @@ const InvoiceCreate = ({ closeModal, onUpdate }) => {
           apiClient.get('/products'),
         ]);
         setContacts(contactsResponse.data || []);
-        setProducts(productsResponse.data || []);
       } catch (error) {
         console.error('Failed to fetch data:', error);
       }
@@ -141,73 +136,43 @@ const InvoiceCreate = ({ closeModal, onUpdate }) => {
     });
   };
 
-  const calculateTotals = () => {
-    const netTotal = formData.line_items.reduce(
-      (sum, item) => sum + (parseFloat(item.line_total) || 0),
-      0
-    );
-
-    // Calculate tax total based on tax rate from products
-    const taxTotal = formData.line_items.reduce((sum, item) => {
-      const product = products.find((p) => p.id === item.product_id);
-      const taxRate = product ? (parseFloat(product.tax_rate) || 0) / 100 : 0;
-      return sum + (parseFloat(item.line_total) || 0) * taxRate;
-    }, 0);
-
-    const grossTotal = netTotal + taxTotal;
-
-    return { netTotal, taxTotal, grossTotal };
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setFormStatus('');
 
     try {
-      // Create invoice header
-      const { netTotal, taxTotal, grossTotal } = calculateTotals();
+      // Create incident header
       const headerData = {
-        invoice_number: formData.invoice_number,
-        invoice_date: formData.invoice_date,
+        incident_number: formData.incident_number,
+        incident_date: formData.incident_date,
         due_date: formData.due_date,
         contact_id: formData.contact_id,
         contact_name: formData.contact_name,
         contact_reference: formData.contact_reference,
         status: formData.status,
         notes: formData.notes,
-        net_total: netTotal,
-        tax_total: taxTotal,
-        gross_total: grossTotal,
       };
 
-      const headerResponse = await apiClient.post('/invoice-headers', headerData);
-      const invoiceId = headerResponse.data.id;
+      const headerResponse = await apiClient.post('/incidents', headerData);
+      const incidentId = headerResponse.data.id;
 
       // Create line items
       if (formData.line_items.length > 0) {
         const lineItemsData = formData.line_items.map((item) => ({
-          invoice_id: invoiceId,
-          product_id: item.product_id,
-          product_sku: item.product_sku,
-          description: item.description,
-          quantity: item.quantity,
-          unit_price: item.unit_price,
-          line_total: item.line_total,
+          incident_id: incidentId,
         }));
 
-        await apiClient.post(`/invoice-details/${invoiceId}`, lineItemsData);
+        await apiClient.post(`/incident-details/${incidentId}`, lineItemsData);
       }
 
       setFormStatus('success');
       if (onUpdate) {
         onUpdate({
-          id: invoiceId,
+          id: incidentId,
           ...headerData,
           line_items: formData.line_items,
-          net_total: netTotal,
-          tax_total: taxTotal,
-          gross_total: grossTotal,
+
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         });
@@ -224,12 +189,12 @@ const InvoiceCreate = ({ closeModal, onUpdate }) => {
   return (
     <div className="bg-white p-2 sm:p-4 rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
       <h2 className="text-xl sm:text-3xl font-bold text-center text-gray-800 mb-3">
-        Create Invoice
+        Create incident
       </h2>
 
       {formStatus === 'success' && (
         <div className="p-4 mb-3 text-sm text-green-700 bg-green-100 rounded-lg">
-          Invoice created successfully.
+          incident created successfully.
         </div>
       )}
 
@@ -241,27 +206,27 @@ const InvoiceCreate = ({ closeModal, onUpdate }) => {
         {/* Header Information */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="invoice_number" className="block text-gray-700 font-semibold">
-              Invoice Number
+            <label htmlFor="incident_number" className="block text-gray-700 font-semibold">
+              incident Number
             </label>
             <input
               type="text"
-              id="invoice_number"
-              name="invoice_number"
-              value={formData.invoice_number}
+              id="incident_number"
+              name="incident_number"
+              value={formData.incident_number}
               readOnly
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label htmlFor="invoice_date" className="block text-gray-700 font-semibold">
-              Invoice Date
+            <label htmlFor="incident_date" className="block text-gray-700 font-semibold">
+              incident Date
             </label>
             <input
               type="date"
-              id="invoice_date"
-              name="invoice_date"
-              value={formData.invoice_date}
+              id="incident_date"
+              name="incident_date"
+              value={formData.incident_date}
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -367,12 +332,11 @@ const InvoiceCreate = ({ closeModal, onUpdate }) => {
         </div>
 
         {/* Line Items */}
-        <InvoiceLines
+        <incidentLines
           lineItems={formData.line_items}
           onAddLineItem={addLineItem}
           onUpdateLineItem={updateLineItem}
           onRemoveLineItem={removeLineItem}
-          calculateTotals={calculateTotals}
         />
 
         <button
@@ -384,11 +348,11 @@ const InvoiceCreate = ({ closeModal, onUpdate }) => {
               : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
           }`}
         >
-          {isLoading ? 'Creating...' : 'Create Invoice'}
+          {isLoading ? 'Creating...' : 'Create incident'}
         </button>
       </form>
     </div>
   );
 };
 
-export default InvoiceCreate;
+export default IncidentCreate;
